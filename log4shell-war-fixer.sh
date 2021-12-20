@@ -63,8 +63,8 @@ if [ $? -eq 0 ]; then
 		echo "\"JndiLookup.class\" file not found. Nothing to do."
 	fi    
 
-	#echo "Cleaning up..."
-	#rm -rdf "${JAR_FOLDER}"
+	echo "Cleaning up..."
+	rm -rf ${LOG4J_WAR_FILEPATH}*.jar
 
 else
 	echo "Log4J v2.x not found. Nothing to do."    
