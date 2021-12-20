@@ -42,31 +42,31 @@ strings "${WAR_FILE}" | grep "${LOG4J_FILE_PATTERN}" > /dev/null
 if [ $? -eq 0 ]; then
 	echo "Log4J v2.x found!"
 
-	echo "Extracting Log4J file from WAR file..."
+	echo "Extracting Log4J jar from WAR file..."
 	unzip -o "${WAR_FILE}" "${LOG4J_WAR_FILEPATH}*" -d .
 
 	LOG4J_FILEPATH=$(ls ${LOG4J_WAR_FILEPATH}*.jar)
 
 	strings "${LOG4J_FILEPATH}" | grep "${JNDILOOKUP_CLASS_PATH}" > /dev/null
 	if [ $? -eq 0 ]; then
-		echo "Removing \"JndiLookup.class\" file from Log4J..."
+		echo "Removing \"JndiLookup.class\" from Log4J jar..."
 		zip -q -d "${LOG4J_FILEPATH}" "${JNDILOOKUP_CLASS_PATH}"
 
 		echo "Backing up original WAR file..."
 		cp -fp "${WAR_FILE}" "${WAR_FILE}.bak"
 
-		echo "Replacing patched Log4J file inside WAR..."
+		echo "Replacing patched Log4J jar inside WAR..."
 		zip -q "${WAR_FILE}" "${LOG4J_FILEPATH}"
 
 		echo "\"${WAR_FILE}\" successfully patched!"
 	else
-		echo "\"JndiLookup.class\" file not found. Nothing to do."
+		echo "\"JndiLookup.class\" not found. Nothing to do."
 	fi    
 
 	echo "Cleaning up..."
 	rm -rf ${LOG4J_WAR_FILEPATH}*.jar
 
 else
-	echo "Log4J v2.x not found. Nothing to do."    
+	echo "Log4J v2.x not found. Nothing to do."
 
 fi
